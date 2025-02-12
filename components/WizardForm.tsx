@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { FormData } from "./types";
+import { FormData, Worker } from "./types";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -22,10 +22,24 @@ export default function WizardForm() {
     alert("Данные успешно сохранены!");
   };
 
+  const onRemove = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      workers: prev.workers.filter((_, i) => i !== index)
+    }));
+  };
+
+  const onEdit = (index: number, worker: Worker) => {
+    setFormData((prev) => ({
+      ...prev,
+      workers: prev.workers.map((w, i) => (i === index ? worker : w))
+    }));
+  };
+
   return (
     <div className="container mx-auto p-6">
       <div className="mx-auto mb-10">
-        <InfoPanel formData={formData} />
+        <InfoPanel formData={formData} onRemove={onRemove} onEdit={onEdit} />
       </div>
       <div className="max-w-lg mx-auto shadow-lg p-4 rounded-md bg-white">
         {step === 1 && (
